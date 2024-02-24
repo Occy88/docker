@@ -6,9 +6,11 @@ services:
     build:
       context: .
       dockerfile: docker/base.Dockerfile
-    depends_on:
-      - octo_db
-      - rabbitmq
+  octo_base_python:
+    image: octo_base_python
+    build:
+      context: .
+      dockerfile: docker/base_python.Dockerfile
   octo_db:
     image: postgres:15-alpine
     container_name: octo_db
@@ -29,17 +31,21 @@ services:
     container_name: octo_web
     depends_on:
       - octo_base
+      - octo_base_python
+      - octo_db
+      - octo_rabbitmq
     volumes:
       - .:/home/app/web:z
     env_file:
       - '.env'
     ports:
       - '8000:8000'
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["python -m","uvicorn", "web.main:app", "--reload", "--host", "0.0.0.0", "--port","8000"]
 
-  redis:
+
+  octo_redis:
     image: redis
-    container_name: octo__redis
+    container_name: octo_redis
 # Additional service for the frontend
   octo_fe:
     build:
@@ -51,11 +57,9 @@ services:
     ports:
       - '3000:3000'  # Port for your frontend dev server
       - "8080:8080"  # Maps port 8080 inside the container to port 8080 on your host
-    depends_on:
-      - octo_base
     command: yarn start  # Change to your frontend directory and start the dev server
 
-  celeryworker:
+  octo_celery:
     <<: *octo_web
     container_name: octo_celery
     env_file:
@@ -72,7 +76,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
-  flower:
+  octo_flower:
     <<: *octo_web
     container_name: octo_flower
     ports:
@@ -81,8 +85,8 @@ services:
       - ".env"
     command: celery --app config.celery:app flower --url_prefix=flower --persistent=True --loglevel INFO
 
-  rabbitmq:
-    container_name: rabbitmq
+  octo_rabbitmq:
+    container_name: octo_rabbitmq
     image: rabbitmq:3-management
     hostname: octo_rabbit
     env_file:

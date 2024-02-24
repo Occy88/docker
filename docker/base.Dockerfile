@@ -1,4 +1,4 @@
-FROM debian as builder
+FROM python:3.12-slim as builder
 
 LABEL authors="octavio@msk.ai"
 # ENVIRONMENT CONFIGURATION
@@ -17,7 +17,9 @@ RUN mkdir -p $APP_HOME/staticfiles && mkdir -p $APP_HOME/media && mkdir -p $APP_
 # INSTALL DEBIAN DEPS
 RUN apt-get -y update && apt-get -y install \
     git \
-    libpq-dev
+    libpq-dev \
+    gettext-base \
+    python3
 
 
 # USER & GROUP SETUP
@@ -36,6 +38,8 @@ RUN if [ -n "$USER_ID" ] && [ -n "$GROUP_ID" ]; then \
 RUN chown -R app:app $APP_HOME
 RUN chmod -R u+rw $APP_HOME;
 RUN chown -R app:app /home/app/.cache
+# for pycharm skeleton updates...
+RUN chown -R app:app /tmp
 
 # DEP INSTALLATION
 COPY docker/wait-for-it.sh /usr/bin/wait-for-it.sh

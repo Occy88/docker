@@ -38,8 +38,6 @@ else
 endif
 	$(DOCKER_COMPOSE) up -d
 
-	@echo "$(INFO)Running django migrations$(COFF)"
-	@make migrate
 	@echo "$(FORMAT)\n\n=============[$(BOLD)$(SUCCESS) SETUP SUCCEEDED $(FORMAT)]========================="
 	@echo "$(INFO) Run 'make run cmd=< -d >' to start Django development server.$(COFF)"
 
