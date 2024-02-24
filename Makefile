@@ -31,10 +31,10 @@ setup: validate-system-packages dir_setup
 
 ifeq ($(shell uname -s),Darwin)
 	@echo "Running on macOS, skipping USER_ID and GROUP_ID setting"
-	$(DOCKER_COMPOSE) build
+	$(DOCKER_COMPOSE) build --build-arg POETRY_GROUPS=test
 else
 	@echo "Not running on macOS, setting USER_ID and GROUP_ID"
-	$(DOCKER_COMPOSE) build $(cmd) --build-arg USER_ID=$(shell id -u) --build-arg GROUP_ID=$(shell id -g)
+	$(DOCKER_COMPOSE) build $(cmd) --build-arg USER_ID=$(shell id -u) --build-arg GROUP_ID=$(shell id -g) --build-arg POETRY_GROUPS=test
 endif
 	$(DOCKER_COMPOSE) up -d
 

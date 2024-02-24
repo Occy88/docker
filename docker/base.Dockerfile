@@ -1,4 +1,4 @@
-FROM python:3.12-slim as builder
+FROM debian as builder
 
 LABEL authors="octavio@msk.ai"
 # ENVIRONMENT CONFIGURATION
@@ -16,13 +16,8 @@ RUN mkdir -p $APP_HOME/staticfiles && mkdir -p $APP_HOME/media && mkdir -p $APP_
 
 # INSTALL DEBIAN DEPS
 RUN apt-get -y update && apt-get -y install \
-    curl \
-    libpq-dev \
-    gcc \
-    gettext \
     git \
-    procps \
-    ffmpeg
+    libpq-dev
 
 
 # USER & GROUP SETUP
@@ -45,11 +40,6 @@ RUN chown -R app:app /home/app/.cache
 # DEP INSTALLATION
 COPY docker/wait-for-it.sh /usr/bin/wait-for-it.sh
 WORKDIR $APP_HOME
-COPY pyproject.toml poetry.lock ./
-RUN pip install --no-cache-dir poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install -vv --no-interaction && \
-    rm -rf $(poetry config cache-dir)
 RUN git config --global --add safe.directory /app
 
 ADD . $APP_HOME

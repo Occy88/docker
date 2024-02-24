@@ -19,6 +19,7 @@ pytest-mock = "^3.12.0"
 
 
 [tool.poetry.group.web.dependencies]
+sqlalchemy = "^2.0.27"
 fastapi = "^0.109.2"
 
 [build-system]
