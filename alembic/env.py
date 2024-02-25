@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from web.config import env
 from web.models.user import BaseModel
-
+from web.models import * # noqa
 target_metadata = BaseModel.metadata
 
 

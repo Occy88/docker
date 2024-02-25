@@ -10,6 +10,7 @@ packages = []
 python = "^3.11"
 pydantic-settings = "^2.2.1"
 pydantic = "^2.6.2"
+pytz = "^2024.1"
 
 
 [tool.poetry.group.test.dependencies]
@@ -30,6 +31,8 @@ sqlmodel = "^0.0.16"
 sqlalchemy-utils = "^0.41.1"
 alembic = "^1.13.1"
 asyncpg = "^0.29.0"
+fastapi-crudrouter = "^0.8.6"
+factory-boy = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -4,7 +4,7 @@ include makefiles/color.mk
 _TEST_PREFIX = $(TEST_PREFIX)
 
 test:
-	$(_TEST_PREFIX) poetry run pytest --durations=50 --disable-warnings $(args) $(path); RESULT=$$? ;
+	$(_TEST_PREFIX) pytest --durations=50 --disable-warnings $(args) $(path); RESULT=$$? ;
 
 coverage:
 	@echo "$(INFO)Running automatic code coverage check$(COFF)"
