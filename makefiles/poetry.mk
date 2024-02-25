@@ -1,7 +1,7 @@
 #include makefiles/main.mk
 include makefiles/color.mk
 .PHONY: pre pre-commit test psql coverage profile show-profile
-_TEST_PREFIX = $(TEST_PREFIX) poetry run
+_TEST_PREFIX = $(TEST_PREFIX)
 
 test:
 	$(_TEST_PREFIX) poetry run pytest --durations=50 --disable-warnings $(args) $(path); RESULT=$$? ;

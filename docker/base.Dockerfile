@@ -19,8 +19,8 @@ RUN apt-get -y update && apt-get -y install \
     git \
     libpq-dev \
     gettext-base \
-    python3
-
+    python3 \
+    bash
 
 # USER & GROUP SETUP
 RUN addgroup --system app && adduser --system app --ingroup app

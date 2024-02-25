@@ -17,11 +17,12 @@ PROJECT_ROOT ?= $(PWD)
 SITE_ROOT 	 ?= $(PROJECT_ROOT)
 
 DOCKER_COMPOSE			= docker-compose
-DOCKER_COMPOSE_RUN		= $(DOCKER_COMPOSE) run --rm
-DOCKER_COMPOSE_DJANGO	= $(DOCKER_COMPOSE_RUN) octaviosh_django
-DOCKER_COMPOSE_DJANGO_PYTHON = $(DOCKER_COMPOSE_DJANGO) python3
-DOCKER_COMPOSE_DJANGO_MANAGE = $(DOCKER_COMPOSE_DJANGO_PYTHON) manage.py
-
+DOCKER_RUN		= $(DOCKER_COMPOSE) run --rm
+DOCKER_RUN_C	= $(DOCKER_RUN) octo_web
+DOCKER_RUN_PYTHON = $(DOCKER_RUN_C) /usr/local/bin/python3
+DOCKER_RUN_MANAGE = $(DOCKER_RUN_PYTHON) manage.py
+TEST_PREFIX = $(DOCKER_RUN_PYTHON) -m
+DB_PREFIX =  $(DOCKER_RUN_C) "/usr/local/bin/python3 -m "
 .PHONY: setup
 
 
@@ -37,7 +38,7 @@ else
 	$(DOCKER_COMPOSE) build $(cmd) --build-arg USER_ID=$(shell id -u) --build-arg GROUP_ID=$(shell id -g) --build-arg POETRY_GROUPS=test
 endif
 	$(DOCKER_COMPOSE) up -d
-
+	make migrate
 	@echo "$(FORMAT)\n\n=============[$(BOLD)$(SUCCESS) SETUP SUCCEEDED $(FORMAT)]========================="
 	@echo "$(INFO) Run 'make run cmd=< -d >' to start Django development server.$(COFF)"
 

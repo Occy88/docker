@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from pydantic_settings import BaseSettings
+from fastapi import status
+
+from web.db import init_models
 
 
 class Settings(BaseSettings):
@@ -11,11 +14,12 @@ class Settings(BaseSettings):
 settings = Settings()
 app = FastAPI()
 
+@app.on_event("startup")
+async def on_startup():
+    await init_models()
 
-@app.get("/info")
-async def info():
-    return {
-        "app_name": settings.app_name,
-        "admin_email": settings.admin_email,
-        "items_per_user": settings.items_per_user,
-    }
+
+
+@app.get("/health")
+async def health():
+    return status.HTTP_200_OK
