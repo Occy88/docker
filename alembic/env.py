@@ -4,9 +4,9 @@ from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from web.config import env
-from web.models.user import BaseModel
+from web.models.user import BaseSQLModel
 from web.models import * # noqa
-target_metadata = BaseModel.metadata
+target_metadata = BaseSQLModel.metadata
 
 
 def do_run_migrations(connection):
